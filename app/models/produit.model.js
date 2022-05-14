@@ -5,8 +5,9 @@ module.exports = mongoose => {
       description: String,
       prix: String,
       quantite: Number,
-      imageurl: String,
-      originalite: String
+      image: String, //images: [],
+      originalite: String,
+      userId: String
     },
    { timestamps: true }
   );

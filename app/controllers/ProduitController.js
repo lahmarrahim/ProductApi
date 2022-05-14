@@ -4,7 +4,7 @@ const Tutorial = db.tutorials;
 // Create and Save a new Product
 exports.create = (req, res) => {
   // Validate request
-  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.imageurl)) {
+  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.image) || (!req.body.userId) ) {
     res.status(400).send({ message: "Remplir tous les champs svp!" });
     return;
   }
@@ -15,7 +15,8 @@ exports.create = (req, res) => {
     description: req.body.description,
     prix: req.body.prix,
     quantite: req.body.quantite,
-    imageurl : req.body.imageurl
+    image : req.body.image,
+    userId : req.body.userId
   });
 
   // Save Product in the database
@@ -49,6 +50,61 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Retrieve all Products from the database by UserId.
+exports.findAllByUser = (req, res) => {
+  const nom = req.query.nom;
+  const userId = req.body.userId;
+
+  var condition = { userId: { $eq: userId } }
+
+  Tutorial.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la récupération du produit."
+      });
+    });
+};
+
+// Retrieve all Products from the database where Originalite null.
+exports.findAllOrgNull = (req, res) => {
+  const nom = req.query.nom;
+
+  var condition = {originalite:{$exists:false}}
+
+  Tutorial.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la récupération du produit."
+      });
+    });
+};
+
+// Retrieve all Products from the database where Originalite non null.
+exports.findAllOrg = (req, res) => {
+  const nom = req.query.nom;
+
+  var condition = {originalite:{$exists:true}}
+
+  Tutorial.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la récupération du produit."
+      });
+    });
+};
+
 // Find a single Product with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
@@ -68,7 +124,7 @@ exports.findOne = (req, res) => {
 
 // Update a Product by the id in the request
 exports.update = (req, res) => {
-  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.imageurl)) {
+  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.image)) {
     return res.status(400).send({
       message: "Les données à mettre à jour ne peuvent pas être vides!"
     });
