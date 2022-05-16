@@ -52,10 +52,29 @@ exports.findAll = (req, res) => {
 
 // Retrieve all Products from the database by UserId.
 exports.findAllByUser = (req, res) => {
-  const nom = req.query.nom;
+  // const nom = req.query.nom;
   const userId = req.body.userId;
 
   var condition = { userId: { $eq: userId } }
+
+  Tutorial.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la récupération du produit."
+      });
+    });
+};
+
+// Retrieve all Products from the database by UserId for Modify.
+exports.findAllByUserForModify = (req, res) => {
+  // const nom = req.query.nom;
+  const userId = req.body.userId;
+
+  var condition = { userId: { $eq: userId } , originalite:{$exists:false} }
 
   Tutorial.find(condition)
     .then(data => {

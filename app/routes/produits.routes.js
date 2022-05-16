@@ -12,13 +12,16 @@ module.exports = app => {
   router.get("/findAll", produitsController.findAll);
 
   // Retrieve all Products by User
-  router.post("/findAllByUser", produitsController.findAllByUser);
+  router.post("/MesProduits", produitsController.findAllByUser);
+
+  // Retrieve all Products by User to Modify
+  router.post("/MesProduitsNonApprouves", produitsController.findAllByUserForModify);
 
   // Retrieve all Products where Org Null
-  router.get("/findAllOrgNull", produitsController.findAllOrgNull);
+  router.get("/ProduitsNonApprouves", produitsController.findAllOrgNull);
 
   // Retrieve all Products where Org non Null
-  router.get("/findAllOrg", produitsController.findAllOrg);
+  router.get("/Catalogue", produitsController.findAllOrg);
 
   // Retrieve all published Products
   router.get("/published", produitsController.findAllPublished);
