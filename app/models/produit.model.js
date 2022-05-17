@@ -7,7 +7,9 @@ module.exports = mongoose => {
       quantite: Number,
       image: String, //images: [],
       originalite: String,
-      userId: String
+      userId: String,
+      userTel: String,
+      expertId: String
     },
    { timestamps: true }
   );

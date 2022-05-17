@@ -35,6 +35,9 @@ module.exports = app => {
   // Update a Product with id by expert
   router.put("/updateByExpert/:id", produitsController.updateByExpert);
 
+   // Retrieve all Products by Expert
+   router.post("/ProduitsApprouvesParMoi", produitsController.findAllByExpert);
+
   // Delete a Product with id
   router.delete("/delete/:id", produitsController.delete);
 

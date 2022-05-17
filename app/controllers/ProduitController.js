@@ -4,7 +4,7 @@ const Tutorial = db.tutorials;
 // Create and Save a new Product
 exports.create = (req, res) => {
   // Validate request
-  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.image) || (!req.body.userId) ) {
+  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.image) || (!req.body.userId) || (!req.body.userTel) ) {
     res.status(400).send({ message: "Remplir tous les champs svp!" });
     return;
   }
@@ -16,7 +16,8 @@ exports.create = (req, res) => {
     prix: req.body.prix,
     quantite: req.body.quantite,
     image : req.body.image,
-    userId : req.body.userId
+    userId : req.body.userId,
+    userTel : req.body.userTel
   });
 
   // Save Product in the database
@@ -168,7 +169,7 @@ exports.update = (req, res) => {
 
 // Update a Product by the id in the request by Expert
 exports.updateByExpert = (req, res) => {
-  if (!req.body.originalite) {
+  if ((!req.body.originalite) || (!req.body.expertId)) {
     return res.status(400).send({
       message: "Les données à mettre à jour ne peuvent pas être vides!"
     });
@@ -187,6 +188,25 @@ exports.updateByExpert = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: "Erreur lors de la mise à jour du produit avec l'ID=" + id
+      });
+    });
+};
+
+// Retrieve all Products from the database by ExpertId.
+exports.findAllByExpert = (req, res) => {
+  // const nom = req.query.nom;
+  const expertId = req.body.expertId;
+
+  var condition = { expertId: { $eq: expertId } }
+
+  Tutorial.find(condition)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la récupération du produit."
       });
     });
 };
