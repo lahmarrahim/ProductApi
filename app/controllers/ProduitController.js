@@ -1,6 +1,48 @@
 const db = require("../models");
 const Tutorial = db.tutorials;
 
+
+// Create and Save a new Product
+exports.add = (req, res) => {
+  // Validate request
+  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.files.images) || (!req.body.userId) || (!req.body.userTel) ) {
+    res.status(400).send({ message: "Remplir tous les champs svp!" });
+    return;
+  }
+const imagesList=[]
+for (let i=0; i<req.files.images.length; i++){
+ const imageUrl="/upload/products/"+ Date.now().toString().trim() +"." + req.files.images[i].mimetype.split('/')[1] 
+ req.files.images[i].mv(
+   "."+imageUrl
+ )
+ imagesList.push("http://localhost:8090"+imageUrl)
+
+}
+  // Create a Product
+  const tutorial = new Tutorial({
+    nom: req.body.nom,
+    description: req.body.description,
+    prix: req.body.prix,
+    quantite: req.body.quantite,
+    images : imagesList,
+    userId : req.body.userId,
+    userTel : req.body.userTel
+  });
+
+  // Save Product in the database
+  tutorial
+    .save(tutorial)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Une erreur s'est produite lors de la création du produit."
+      });
+    });
+};
+
 // Create and Save a new Product
 exports.create = (req, res) => {
   // Validate request
@@ -144,11 +186,13 @@ exports.findOne = (req, res) => {
 
 // Update a Product by the id in the request
 exports.update = (req, res) => {
-  if ((!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) || (!req.body.image)) {
+  console.log("req")
+  if ( (!req.body.nom) || (!req.body.description) || (!req.body.prix) || (!req.body.quantite) ) {
     return res.status(400).send({
       message: "Les données à mettre à jour ne peuvent pas être vides!"
     });
   }
+  
 
   const id = req.params.id;
 

@@ -4,10 +4,12 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+  // Create a new Product
+  router.post("/add", produitsController.add);
 
   // Create a new Product
   router.post("/create", produitsController.create);
-
+  
   // Retrieve all Products
   router.get("/findAll", produitsController.findAll);
 
@@ -35,8 +37,8 @@ module.exports = app => {
   // Update a Product with id by expert
   router.put("/updateByExpert/:id", produitsController.updateByExpert);
 
-   // Retrieve all Products by Expert
-   router.post("/ProduitsApprouvesParMoi", produitsController.findAllByExpert);
+  // Retrieve all Products by Expert
+  router.post("/ProduitsApprouvesParMoi", produitsController.findAllByExpert);
 
   // Delete a Product with id
   router.delete("/delete/:id", produitsController.delete);
