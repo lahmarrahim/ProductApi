@@ -40,7 +40,7 @@ db.mongoose
   app.get('/upload/*:filename*', (req, res) => {
     console.log(__dirname)
     res.sendFile(
-      path.join(__dirname, '../ProductApi/upload', req.path.substring(8, req.path.length))
+      path.join(__dirname, '../ProductApiUpload/upload', req.path.substring(8, req.path.length))
     )
   })
 
